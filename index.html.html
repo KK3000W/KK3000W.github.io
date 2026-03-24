@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ARKHAM CHRONICLES // Mitos de Cthulhu</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="cthulhu_style.css"/>
+</head>
+<body>
+
+  <canvas id="bg-canvas"></canvas>
+  <div class="scanlines"></div>
+  <div class="vignette"></div>
+
+  <!-- ══════ HEADER ══════ -->
+  <header id="header">
+    <div class="header-inner">
+      <div class="logo-wrap">
+        <div class="logo-symbol">☽</div>
+        <div class="logo-text">
+          <h1 class="logo-title">ARKHAM CHRONICLES</h1>
+          <p class="logo-sub">// Sistema de Mitos de Cthulhu</p>
+        </div>
+      </div>
+      <nav class="main-nav">
+        <button class="nav-btn active" data-section="historias">
+          <span class="nav-icon">📜</span>
+          <span>Historias</span>
+        </button>
+        <button class="nav-btn" data-section="dados">
+          <span class="nav-icon">🎲</span>
+          <span>Dados</span>
+        </button>
+        <button class="nav-btn" data-section="personajes">
+          <span class="nav-icon">🧠</span>
+          <span>Personajes</span>
+        </button>
+      </nav>
+      <div class="header-sanity">
+        <span class="sanity-label">CORDURA</span>
+        <div class="sanity-bar-wrap">
+          <div class="sanity-bar" id="sanity-bar"></div>
+        </div>
+        <span class="sanity-val" id="sanity-val">99</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ══════ MAIN ══════ -->
+  <main id="main">
+
+    <!-- ─── SECCIÓN: HISTORIAS ─── -->
+    <section id="sec-historias" class="section active">
+      <div class="section-header">
+        <h2 class="section-title">📜 Mis Historias</h2>
+        <button class="btn-primary" id="btn-nueva-historia">+ Nueva Historia</button>
+      </div>
+
+      <div id="historias-grid" class="historias-grid"></div>
+
+      <!-- Vista detalle de historia -->
+      <div id="historia-detalle" class="historia-detalle hidden">
+        <div class="detalle-header">
+          <button class="btn-back" id="btn-volver">← Volver</button>
+          <h2 id="detalle-titulo" class="detalle-titulo"></h2>
+          <button class="btn-danger" id="btn-eliminar-historia">🗑 Eliminar</button>
+        </div>
+        <div class="detalle-tabs">
+          <button class="dtab active" data-tab="mapas">🗺 Mapas</button>
+          <button class="dtab" data-tab="notas">📝 Notas</button>
+          <button class="dtab" data-tab="items">⚔ Items</button>
+          <button class="dtab" data-tab="npcs">👥 NPCs</button>
+        </div>
+        <div class="detalle-content">
+
+          <!-- MAPAS -->
+          <div id="tab-mapas" class="tab-panel active">
+            <div class="tab-actions">
+              <label class="btn-primary btn-upload">
+                📁 Añadir Mapa
+                <input type="file" id="input-mapa" accept="image/*" multiple hidden/>
+              </label>
+            </div>
+            <div id="mapas-grid" class="media-grid"></div>
+          </div>
+
+          <!-- NOTAS -->
+          <div id="tab-notas" class="tab-panel hidden">
+            <div class="tab-actions">
+              <button class="btn-primary" id="btn-nueva-nota">+ Nueva Nota</button>
+            </div>
+            <div id="notas-list" class="notas-list"></div>
+          </div>
+
+          <!-- ITEMS -->
+          <div id="tab-items" class="tab-panel hidden">
+            <div class="tab-actions">
+              <button class="btn-primary" id="btn-nuevo-item">+ Nuevo Item</button>
+            </div>
+            <div id="items-list" class="items-list"></div>
+          </div>
+
+          <!-- NPCs -->
+          <div id="tab-npcs" class="tab-panel hidden">
+            <div class="tab-actions">
+              <button class="btn-primary" id="btn-nuevo-npc">+ Nuevo NPC</button>
+            </div>
+            <div id="npcs-list" class="npcs-list"></div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── SECCIÓN: DADOS ─── -->
+    <section id="sec-dados" class="section hidden">
+      <div class="section-header">
+        <h2 class="section-title">🎲 Lanzador de Dados</h2>
+        <button class="btn-secondary" id="btn-limpiar-historial">Limpiar historial</button>
+      </div>
+
+      <div class="dados-layout">
+        <div class="dados-panel">
+          <p class="panel-label">SELECCIONA TUS DADOS</p>
+          <div class="dados-selector" id="dados-selector">
+            <div class="dado-card" data-dado="D4">
+              <div class="dado-shape d4">D4</div>
+              <div class="dado-controls">
+                <button class="qty-btn" data-d="D4" data-op="-">−</button>
+                <span class="qty-val" id="qty-D4">0</span>
+                <button class="qty-btn" data-d="D4" data-op="+">+</button>
+              </div>
+            </div>
+            <div class="dado-card" data-dado="D6">
+              <div class="dado-shape d6">D6</div>
+              <div class="dado-controls">
+                <button class="qty-btn" data-d="D6" data-op="-">−</button>
+                <span class="qty-val" id="qty-D6">0</span>
+                <button class="qty-btn" data-d="D6" data-op="+">+</button>
+              </div>
+            </div>
+            <div class="dado-card" data-dado="D8">
+              <div class="dado-shape d8">D8</div>
+              <div class="dado-controls">
+                <button class="qty-btn" data-d="D8" data-op="-">−</button>
+                <span class="qty-val" id="qty-D8">0</span>
+                <button class="qty-btn" data-d="D8" data-op="+">+</button>
+              </div>
+            </div>
+            <div class="dado-card" data-dado="D10">
+              <div class="dado-shape d10">D10</div>
+              <div class="dado-controls">
+                <button class="qty-btn" data-d="D10" data-op="-">−</button>
+                <span class="qty-val" id="qty-D10">0</span>
+                <button class="qty-btn" data-d="D10" data-op="+">+</button>
+              </div>
+            </div>
+            <div class="dado-card" data-dado="D12">
+              <div class="dado-shape d12">D12</div>
+              <div class="dado-controls">
+                <button class="qty-btn" data-d="D12" data-op="-">−</button>
+                <span class="qty-val" id="qty-D12">0</span>
+                <button class="qty-btn" data-d="D12" data-op="+">+</button>
+              </div>
+            </div>
+            <div class="dado-card" data-dado="D20">
+              <div class="dado-shape d20">D20</div>
+              <div class="dado-controls">
+                <button class="qty-btn" data-d="D20" data-op="-">−</button>
+                <span class="qty-val" id="qty-D20">0</span>
+                <button class="qty-btn" data-d="D20" data-op="+">+</button>
+              </div>
+            </div>
+            <div class="dado-card" data-dado="D100">
+              <div class="dado-shape d100">D%</div>
+              <div class="dado-controls">
+                <button class="qty-btn" data-d="D100" data-op="-">−</button>
+                <span class="qty-val" id="qty-D100">0</span>
+                <button class="qty-btn" data-d="D100" data-op="+">+</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="modificador-row">
+            <label>Modificador:</label>
+            <button class="qty-btn" id="mod-menos">−</button>
+            <span id="mod-val">0</span>
+            <button class="qty-btn" id="mod-mas">+</button>
+          </div>
+
+          <button class="btn-tirar" id="btn-tirar">⚄ TIRAR DADOS</button>
+        </div>
+
+        <div class="dados-resultado-panel">
+          <div id="dados-animacion" class="dados-animacion"></div>
+          <div id="resultado-box" class="resultado-box hidden">
+            <p class="resultado-formula" id="resultado-formula"></p>
+            <div class="resultado-dados" id="resultado-dados"></div>
+            <div class="resultado-total-wrap">
+              <span class="resultado-total-label">TOTAL</span>
+              <span class="resultado-total" id="resultado-total">0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="dados-historial-panel">
+          <p class="panel-label">HISTORIAL DE TIRADAS</p>
+          <div id="historial-list" class="historial-list"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── SECCIÓN: PERSONAJES ─── -->
+    <section id="sec-personajes" class="section hidden">
+      <div class="section-header">
+        <h2 class="section-title">🧠 Personajes & Guía</h2>
+      </div>
+
+      <div class="personajes-tabs">
+        <button class="ptab active" data-ptab="guia">📖 Guía de Creación</button>
+        <button class="ptab" data-ptab="calculadora">⚙ Calculadora</button>
+        <button class="ptab" data-ptab="mispersonajes">👤 Mis Personajes</button>
+      </div>
+
+      <!-- GUÍA -->
+      <div id="ptab-guia" class="ptab-panel active">
+        <div class="guia-content">
+          <div class="guia-block">
+            <h3>🎭 ¿Qué es un Investigador?</h3>
+            <p>En los Mitos de Cthulhu, no juegas héroes invencibles. Juegas <strong>Investigadores</strong>: personas normales (médicos, periodistas, detectives, académicos...) que se adentran en misterios que desafían la cordura humana. La supervivencia no está garantizada.</p>
+          </div>
+          <div class="guia-block">
+            <h3>📊 Las Características (Stats)</h3>
+            <p>Cada personaje tiene <strong>8 características base</strong>. Se generan tirando dados y multiplicando:</p>
+            <div class="guia-tabla">
+              <div class="guia-fila header"><span>Característica</span><span>Cómo se calcula</span><span>Máximo</span></div>
+              <div class="guia-fila"><span>💪 Fuerza (FUE)</span><span>3D6 × 5</span><span>90</span></div>
+              <div class="guia-fila"><span>🏃 Constitución (CON)</span><span>3D6 × 5</span><span>90</span></div>
+              <div class="guia-fila"><span>🤸 Tamaño (TAM)</span><span>(2D6+6) × 5</span><span>90</span></div>
+              <div class="guia-fila"><span>🎯 Destreza (DES)</span><span>3D6 × 5</span><span>90</span></div>
+              <div class="guia-fila"><span>✨ Apariencia (APA)</span><span>3D6 × 5</span><span>90</span></div>
+              <div class="guia-fila"><span>🧠 Inteligencia (INT)</span><span>(2D6+6) × 5</span><span>90</span></div>
+              <div class="guia-fila"><span>💡 Poder (POD)</span><span>3D6 × 5</span><span>90</span></div>
+              <div class="guia-fila"><span>📚 Educación (EDU)</span><span>(2D6+6) × 5</span><span>90</span></div>
+            </div>
+          </div>
+          <div class="guia-block">
+            <h3>❤️ Puntos de Vida, Cordura y Magia</h3>
+            <div class="guia-tabla">
+              <div class="guia-fila header"><span>Stat derivado</span><span>Fórmula</span></div>
+              <div class="guia-fila"><span>❤️ Puntos de Vida (PV)</span><span>(CON + TAM) / 10</span></div>
+              <div class="guia-fila"><span>🧩 Cordura (COR)</span><span>= POD</span></div>
+              <div class="guia-fila"><span>🔮 Puntos de Magia (PM)</span><span>POD / 5</span></div>
+              <div class="guia-fila"><span>💸 Suerte</span><span>3D6 × 5</span></div>
+            </div>
+          </div>
+          <div class="guia-block">
+            <h3>🛠 Las Habilidades</h3>
+            <p>Tienes <strong>puntos de habilidad</strong> para repartir entre las habilidades de tu personaje. Cada habilidad tiene un valor base (el mínimo que todo el mundo tiene):</p>
+            <ul class="guia-lista">
+              <li>🎓 Puntos de ocupación: <strong>EDU × 4</strong> — para las habilidades de tu profesión</li>
+              <li>🌍 Puntos de interés: <strong>INT × 2</strong> — para aficiones y habilidades personales</li>
+              <li>Ninguna habilidad puede superar <strong>90%</strong> durante la creación</li>
+            </ul>
+          </div>
+          <div class="guia-block">
+            <h3>⚠️ La Cordura y el Horror</h3>
+            <p>Cada vez que tu personaje ve algo <em>que no debería existir</em>, hace una <strong>tirada de Cordura</strong>. Si falla, pierde puntos de Cordura (COR). Si llega a 0... la locura es inevitable. Algunos efectos:</p>
+            <ul class="guia-lista">
+              <li>Perder 5+ COR de golpe → <strong>locura temporal</strong></li>
+              <li>Perder 1/5 de COR en una sesión → <strong>locura indefinida</strong></li>
+              <li>COR = 0 → <strong>locura permanente</strong>, el personaje queda fuera de juego</li>
+            </ul>
+          </div>
+          <div class="guia-block">
+            <h3>🎲 Cómo hacer tiradas</h3>
+            <p>La mayoría de tiradas son con <strong>D100</strong>. Tienes que sacar <em>igual o menos</em> que el valor de tu habilidad para tener éxito:</p>
+            <ul class="guia-lista">
+              <li>Tirada normal: sacar ≤ valor de habilidad</li>
+              <li>Éxito duro: sacar ≤ mitad del valor</li>
+              <li>Éxito extremo: sacar ≤ un quinto del valor</li>
+              <li>Pifia: 96-100 (siempre fallo catastrófico)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- CALCULADORA -->
+      <div id="ptab-calculadora" class="ptab-panel hidden">
+        <div class="calc-layout">
+          <div class="calc-stats">
+            <h3>🎲 Genera tus Características</h3>
+            <p class="calc-hint">Pulsa el dado para tirar cada característica, o escribe el valor manualmente.</p>
+            <div class="stats-grid" id="stats-grid"></div>
+            <div class="stats-derivados" id="stats-derivados"></div>
+          </div>
+          <div class="calc-habilidades">
+            <h3>🛠 Reparte tus Habilidades</h3>
+            <div class="puntos-info" id="puntos-info">
+              <div class="puntos-box">
+                <span class="puntos-label">Ocupación</span>
+                <span class="puntos-val" id="pts-ocup">0</span>
+                <span class="puntos-label">restantes</span>
+              </div>
+              <div class="puntos-box">
+                <span class="puntos-label">Interés</span>
+                <span class="puntos-val" id="pts-int">0</span>
+                <span class="puntos-label">restantes</span>
+              </div>
+            </div>
+            <div class="habilidades-grid" id="habilidades-grid"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MIS PERSONAJES -->
+      <div id="ptab-mispersonajes" class="ptab-panel hidden">
+        <div class="tab-actions">
+          <button class="btn-primary" id="btn-guardar-personaje">💾 Guardar Personaje Actual</button>
+        </div>
+        <div id="personajes-list" class="personajes-list"></div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ══════ MODALES ══════ -->
+  <div id="modal-overlay" class="modal-overlay hidden">
+    <div id="modal-box" class="modal-box">
+      <h3 id="modal-title" class="modal-title"></h3>
+      <div id="modal-body" class="modal-body"></div>
+      <div class="modal-footer">
+        <button class="btn-secondary" id="modal-cancel">Cancelar</button>
+        <button class="btn-primary" id="modal-ok">Aceptar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal visor imagen -->
+  <div id="img-viewer" class="img-viewer hidden">
+    <button id="img-viewer-close">✕</button>
+    <img id="img-viewer-img" src="" alt=""/>
+    <p id="img-viewer-caption"></p>
+  </div>
+
+  <script src="cthulhu_script.js"></script>
+</body>
+</html>
